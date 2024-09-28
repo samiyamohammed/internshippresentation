@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:real_estate_marketplace/bloc/BottomNavigationBloc.dart';
+import 'package:real_estate_marketplace/bloc/BottomNavigationBloc.dart'; 
 import 'package:real_estate_marketplace/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:real_estate_marketplace/bloc/home_bloc.dart';
 import 'package:real_estate_marketplace/bloc/profile_bloc/profile_bloc.dart';
 import 'package:real_estate_marketplace/bloc/profile_bloc/profile_event.dart';
 import 'package:real_estate_marketplace/bloc/search_filter_bloc/search_filter_bloc.dart';
 import 'package:real_estate_marketplace/bloc/theme_bloc/theme_bloc.dart';
-import 'package:real_estate_marketplace/config/router.dart';
+import 'package:real_estate_marketplace/config/router.dart'; 
 
 void main() {
   runApp(const RealEstateApp());
-} 
+}
 
 class RealEstateApp extends StatelessWidget {
   const RealEstateApp({super.key});
@@ -30,11 +30,9 @@ class RealEstateApp extends StatelessWidget {
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, themeState) {
           return MaterialApp.router(
-          // return MaterialApp(
-             debugShowCheckedModeBanner: false,
-             theme: themeState.themeData,
-          //   home: const AgentPage(),
-            routerConfig: router,
+            debugShowCheckedModeBanner: false,
+            theme: themeState.themeData,
+            routerConfig: router, 
           );
         },
       ),

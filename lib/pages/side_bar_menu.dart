@@ -47,7 +47,7 @@ class CustomDrawer extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.orange,
-                    backgroundColor: Colors.white.withOpacity(0.8),
+                    backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40),
                       side: const BorderSide(color: Colors.orange),
@@ -67,7 +67,7 @@ class CustomDrawer extends StatelessWidget {
                   context.push('/settings');
                 }),
                 _buildDrawerItem(Icons.add_box, "Add Property", () {
-                  context.push('/add_property');
+                  context.push('/addproperty');
                 }),
                 _buildDrawerItem(Icons.help_outline, "FAQs", () {
                   context.push('/faq');

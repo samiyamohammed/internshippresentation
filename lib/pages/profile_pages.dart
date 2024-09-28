@@ -191,12 +191,12 @@ class ProfilePage extends StatelessWidget {
                                 ignoreBlank: false,
                                 autoValidateMode: AutovalidateMode.disabled,
                                 selectorTextStyle: const TextStyle(
-                                    color: Color.fromARGB(
-                                        255, 255, 255, 255)),
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                                 textFieldController: TextEditingController()
                                   ..text = state.phonenumber,
                                 formatInput: true,
-                                keyboardType: const TextInputType.numberWithOptions(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
                                   signed: true,
                                   decimal: true,
                                 ),

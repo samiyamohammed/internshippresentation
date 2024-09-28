@@ -1,9 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:real_estate_marketplace/bloc/BottomNavigationBloc.dart';
 import 'package:real_estate_marketplace/bloc/home_bloc.dart';
+import 'package:real_estate_marketplace/models/bannermodel.dart';
+import 'package:real_estate_marketplace/models/demo_users.dart';
 import 'package:real_estate_marketplace/pages/side_bar_menu.dart';
 import '../../widgets/bottom_navigation.dart';
 import '../../models/properties_list_model.dart';
@@ -20,6 +22,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final BannerImage mockHomeBanner = BannerImage(
+    imageUrl: 'assets/images/banner_image.png', // Mock data until API is ready
+  );
 
   final Map<String, bool> selectedFilters = {
     'Commercial': false,
@@ -31,10 +36,14 @@ class _HomePageState extends State<HomePage> {
 
   List<Property> filteredProperties = properties;
   List<FeaturedProperty> filteredFeaturedProperties = featuredPropertyList;
-
+// Simulate logged-in user's email (This will come from actual authentication)
+  String loggedInEmail = 'myname1996@gmail.com';
+  late Users loggedInUser;
   @override
   void initState() {
     super.initState();
+    // Fetch logged-in user from the model
+    loggedInUser = getLoggedInUser(loggedInEmail);
     applyFilters();
   }
 
@@ -80,20 +89,22 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  // Implement navigation to profile page
+                  context.push('/profile');
                 },
-                child: const Row(
+                child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/profile_icon.png'),
+                      backgroundImage: loggedInUser != null
+                          ? AssetImage(loggedInUser.image)
+                          : const AssetImage(
+                              'assets/images/default_profile_icon.png'),
                       radius: 16,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
-                      'Name',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      loggedInUser != null ? loggedInUser.name : 'Guest',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -104,13 +115,12 @@ class _HomePageState extends State<HomePage> {
           centerTitle: false,
         ),
         drawer: const CustomDrawer(),
-        drawerScrimColor:
-            Colors.transparent, // Make outside of drawer clickable
+        drawerScrimColor: Colors.transparent,
         drawerEdgeDragWidth: MediaQuery.of(context).size.width * 0.5,
         body: GestureDetector(
           onTap: () {
             if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
-              Navigator.of(context).pop(); // Close the drawer if open
+              Navigator.of(context).pop();
             }
           },
           child: SingleChildScrollView(
@@ -120,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
                 Center(
                   child: Image.asset(
-                    'assets/images/banner_image.png',
+                    mockHomeBanner.imageUrl,
                     width: 429,
                     height: 147,
                     fit: BoxFit.cover,
@@ -200,22 +210,19 @@ class _HomePageState extends State<HomePage> {
                         : filteredFeaturedProperties.length +
                             1, // Show "See All" even if fewer than 5
                     itemBuilder: (context, index) {
-                      // Check if this is the last item, which will be the "See All" button
                       if (index == filteredFeaturedProperties.length ||
                           index == 5) {
                         return GestureDetector(
                           onTap: () {
-                            // Implement navigation to the page with all featured properties
                             context.go('/featuredProperties');
                           },
                           child: Container(
-                            width: 70, // Adjust to make the button circular
+                            width: 70,
                             height: 70,
                             margin: const EdgeInsets.symmetric(horizontal: 8.0),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.blueAccent),
-                              shape: BoxShape
-                                  .circle, // Makes the container fully circular
+                              shape: BoxShape.circle,
                             ),
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -224,14 +231,11 @@ class _HomePageState extends State<HomePage> {
                                   Icons.arrow_forward,
                                   color: Colors.blueAccent,
                                 ),
-                                SizedBox(
-                                    height:
-                                        4), // Add some spacing between the icon and text
+                                SizedBox(height: 4),
                                 Text(
                                   'See All',
                                   style: TextStyle(
-                                    fontSize:
-                                        10, // Smaller font size for text under icon
+                                    fontSize: 10,
                                     color: Colors.blueAccent,
                                   ),
                                 ),
@@ -247,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: FeaturedPropertyCard(
                           property: filteredFeaturedProperties[index],
-                          showStatusTag: true, // Ensure status tag is shown
+                          showStatusTag: true,
                         ),
                       );
                     },
@@ -282,22 +286,18 @@ class _HomePageState extends State<HomePage> {
                       final rentProperties = filteredProperties
                           .where((property) => property.status == 'For Rent')
                           .toList();
-
-                      // Check if this is the last item, which will be the "See All" button
                       if (index == rentProperties.length || index == 5) {
                         return GestureDetector(
                           onTap: () {
-                            // Implement navigation to the page with all "For Rent" properties
                             context.go('/rentProperties');
                           },
                           child: Container(
-                            width: 70, // Adjust to make the button circular
+                            width: 70,
                             height: 70,
                             margin: const EdgeInsets.symmetric(horizontal: 8.0),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.blueAccent),
-                              shape: BoxShape
-                                  .circle, // Makes the container fully circular
+                              shape: BoxShape.circle,
                             ),
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -306,14 +306,11 @@ class _HomePageState extends State<HomePage> {
                                   Icons.arrow_forward,
                                   color: Colors.blueAccent,
                                 ),
-                                SizedBox(
-                                    height:
-                                        4), // Spacing between the icon and text
+                                SizedBox(height: 4),
                                 Text(
                                   'See All',
                                   style: TextStyle(
-                                    fontSize:
-                                        10, // Smaller font size for text under icon
+                                    fontSize: 10,
                                     color: Colors.blueAccent,
                                   ),
                                 ),
@@ -329,8 +326,7 @@ class _HomePageState extends State<HomePage> {
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: PropertyCard(
                           property: rentProperties[index],
-                          showStatusTag:
-                              false, // Hide status tag in For Rent section
+                          showStatusTag: false,
                         ),
                       );
                     },
@@ -373,13 +369,12 @@ class _HomePageState extends State<HomePage> {
                             context.go('/saleProperties');
                           },
                           child: Container(
-                            width: 70, // Adjust to make the button circular
+                            width: 70,
                             height: 70,
                             margin: const EdgeInsets.symmetric(horizontal: 8.0),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.blueAccent),
-                              shape: BoxShape
-                                  .circle, // Makes the container fully circular
+                              shape: BoxShape.circle,
                             ),
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -388,14 +383,11 @@ class _HomePageState extends State<HomePage> {
                                   Icons.arrow_forward,
                                   color: Colors.blueAccent,
                                 ),
-                                SizedBox(
-                                    height:
-                                        4), // Spacing between the icon and text
+                                SizedBox(height: 4),
                                 Text(
                                   'See All',
                                   style: TextStyle(
-                                    fontSize:
-                                        10, // Smaller font size for text under icon
+                                    fontSize: 10,
                                     color: Colors.blueAccent,
                                   ),
                                 ),
@@ -411,15 +403,13 @@ class _HomePageState extends State<HomePage> {
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: PropertyCard(
                           property: saleProperties[index],
-                          showStatusTag:
-                              false, // Hide status tag in For Sale section
+                          showStatusTag: false,
                         ),
                       );
                     },
                   ),
                 ),
 
-                // For Investment Section
                 // For Investment Section
                 const Padding(
                   padding: EdgeInsets.all(8.0),
@@ -449,21 +439,18 @@ class _HomePageState extends State<HomePage> {
                               (property) => property.status == 'For Investment')
                           .toList();
 
-                      // Check if this is the last item, which will be the "See All" button
                       if (index == investmentProperties.length || index == 5) {
                         return GestureDetector(
                           onTap: () {
-                            // Implement navigation to the page with all "For Investment" properties
                             context.go('/investmentProperties');
                           },
                           child: Container(
-                            width: 70, // Adjust to make the button circular
+                            width: 70,
                             height: 70,
                             margin: const EdgeInsets.symmetric(horizontal: 8.0),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.blueAccent),
-                              shape: BoxShape
-                                  .circle, // Makes the container fully circular
+                              shape: BoxShape.circle,
                             ),
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -472,14 +459,11 @@ class _HomePageState extends State<HomePage> {
                                   Icons.arrow_forward,
                                   color: Colors.blueAccent,
                                 ),
-                                SizedBox(
-                                    height:
-                                        4), // Spacing between the icon and text
+                                SizedBox(height: 4),
                                 Text(
                                   'See All',
                                   style: TextStyle(
-                                    fontSize:
-                                        10, // Smaller font size for text under icon
+                                    fontSize: 10,
                                     color: Colors.blueAccent,
                                   ),
                                 ),
@@ -495,8 +479,7 @@ class _HomePageState extends State<HomePage> {
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: PropertyCard(
                           property: investmentProperties[index],
-                          showStatusTag:
-                              false, // Hide status tag in For Investment section
+                          showStatusTag: false,
                         ),
                       );
                     },

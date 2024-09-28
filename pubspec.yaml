@@ -48,6 +48,7 @@ dependencies:
   intl_phone_field: ^3.2.0
   intl_phone_number_input: ^0.7.4
   image_picker: ^1.1.2
+  file_picker: ^8.0.6
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +81,7 @@ flutter:
     - assets\images\profile_icon.png
     - assets\images\banner_image.png
     - assets\images\city_skyline.png
+    - assets\images\lodo.png
 
   #   - images/a_dot_ham.jpeg
 

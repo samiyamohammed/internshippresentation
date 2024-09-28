@@ -30,7 +30,7 @@ List<Property> properties = [
     price: 5000000.00,
     locationName: 'Addis Sefer',
     status: 'For Investment',
-    image: 'assets/images/Luxury_villa.png',
+    image: 'assets/images/Luxury_villa.png',//
     type: 'villa',
     bedroom: 4,
     bathroom: 2,

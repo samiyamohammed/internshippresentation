@@ -65,3 +65,8 @@ List<Users> demousers = [
     bio: 'Agent bio',
   ),
 ];
+// Mock function to fetch the logged-in user
+Users getLoggedInUser(String email) {
+  // Simulate fetching the logged-in user by email
+  return demousers.firstWhere((user) => user.email == email);
+}
